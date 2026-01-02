@@ -1,5 +1,7 @@
 # EdTech Hackathon - Virtual Lab Companion
 
+this project is done by dharma
+
 ## Project info
 
 This is a virtual lab companion application created by Bhaskar for the EdTech Hackathon.
