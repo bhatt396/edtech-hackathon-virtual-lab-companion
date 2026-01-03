@@ -1,22 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { FlaskConical, Boxes, ClipboardList, Download, Sun, Moon } from 'lucide-react';
+import { FlaskConical, Boxes, ClipboardList, Download, Sun, Moon, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { MolecularLogo } from '@/components/MolecularLogo';
 
 export function LandingPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [language, setLanguage] = useState<'nepali' | 'english'>('english');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
-  // Effect to handle theme class on document body if needed, or just specific to this page container
-  // For now, we'll keep it contained to the LandingPage component div
-
   const handleGuestAccess = () => {
-    login('guest@virtuallab.com', 'student', 'Guest User');
-    navigate('/student');
+    navigate('/library');
   };
 
   const features = [
@@ -49,8 +45,8 @@ export function LandingPage() {
 
       {/* 1. Distinct Top Header Bar */}
       <nav className={`w-full h-16 px-6 flex items-center justify-between border-b z-50 transition-colors ${isDark
-          ? 'bg-[#0B1120] border-white/5'
-          : 'bg-white border-slate-200'
+        ? 'bg-[#0B1120] border-white/5'
+        : 'bg-white border-slate-200'
         }`}>
         {/* Left: Logo */}
         <div className="flex items-center gap-3">
@@ -102,8 +98,8 @@ export function LandingPage() {
               size="sm"
               variant="outline"
               className={`px-6 font-semibold ${isDark
-                  ? 'bg-transparent border-slate-600 text-slate-200 hover:bg-white/10 hover:text-white'
-                  : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
+                ? 'bg-transparent border-slate-600 text-slate-200 hover:bg-white/10 hover:text-white'
+                : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
                 }`}
             >
               Sign Up
@@ -120,14 +116,14 @@ export function LandingPage() {
             src="/background.png"
             alt="Lab Background"
             className={`w-full h-full object-cover transition-all duration-700 ${isDark
-                ? 'brightness-[0.85] contrast-[1.1]'
-                : 'brightness-[1.05] contrast-[0.95] opacity-90'
+              ? 'brightness-[0.85] contrast-[1.1]'
+              : 'brightness-[1.05] contrast-[0.95] opacity-90'
               }`}
           />
           {/* Content Overlay Gradient */}
           <div className={`absolute inset-0 bg-gradient-to-t ${isDark
-              ? 'from-[#0F172A] via-[#0F172A]/40 to-transparent'
-              : 'from-slate-50 via-slate-50/40 to-transparent'
+            ? 'from-[#0F172A] via-[#0F172A]/40 to-transparent'
+            : 'from-slate-50 via-slate-50/40 to-transparent'
             }`} />
         </div>
 
@@ -135,26 +131,58 @@ export function LandingPage() {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center h-full pt-10 pb-6">
 
           {/* Marquee Pill */}
-          <div className={`mb-6 py-1.5 px-6 rounded-full border backdrop-blur-md shadow-lg max-w-2xl w-full overflow-hidden flex justify-center ${isDark
-              ? 'bg-[#1e293b]/60 border-white/10 text-blue-200'
-              : 'bg-white/60 border-slate-200 text-slate-700'
+          <div className={`mb-8 py-2 px-6 rounded-full border backdrop-blur-xl shadow-[0_0_20px_rgba(0,0,0,0.1)] max-w-md w-full overflow-hidden relative group cursor-default transition-all hover:scale-105 ${isDark
+            ? 'bg-blue-950/40 border-blue-400/20 text-blue-200'
+            : 'bg-white/60 border-blue-200 text-blue-700'
             }`}>
-            <span className="truncate text-sm font-medium tracking-wide">
-              ✨ Learn & Experiment Like Never Before! • For Nepali +2 Students!
-            </span>
+            <style dangerouslySetInnerHTML={{
+              __html: `
+                @keyframes scroll {
+                  0% { transform: translateX(100%); }
+                  100% { transform: translateX(-100%); }
+                }
+                .animate-scroll {
+                  animation: scroll 10s linear infinite;
+                }
+                .group:hover .animate-scroll {
+                  animation-play-state: paused;
+                }
+              `}} />
+            <div className="w-full overflow-hidden flex items-center justify-center">
+              <div className="animate-scroll whitespace-nowrap">
+                <span className="text-sm font-semibold tracking-wider">✨ Learn & Experiment Like Never Before! ✨</span>
+              </div>
+            </div>
           </div>
 
           {/* Main Titles */}
           <div className="text-center space-y-4 max-w-4xl mb-auto mt-4">
-            <h1 className={`text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] drop-shadow-xl ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Revolutionizing Science <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
-                Education Virtually.
-              </span>
-            </h1>
+
             <p className={`text-lg md:text-2xl font-bold max-w-2xl mx-auto leading-relaxed drop-shadow-md ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
               Step into a high-fidelity virtual laboratory. Conduct experiments, visualize molecular structures, and master concepts with immersive interactivity.
             </p>
+
+            <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                onClick={() => navigate('/library')}
+                className="bg-blue-600 hover:bg-blue-500 text-white h-14 px-10 text-lg font-bold rounded-2xl shadow-xl shadow-blue-500/20 gap-2 transition-all hover:scale-105 active:scale-95"
+              >
+                Start Learning for Free
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => navigate('/login')}
+                className={`h-14 px-10 text-lg font-semibold rounded-2xl border-2 transition-all hover:scale-105 active:scale-95 ${isDark
+                  ? 'border-slate-700 text-white hover:bg-white/5'
+                  : 'border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm'
+                  }`}
+              >
+                Sign In
+              </Button>
+            </div>
           </div>
 
           {/* Feature Cards Grid */}
@@ -163,12 +191,12 @@ export function LandingPage() {
               const Icon = feature.icon;
               return (
                 <div key={index} className={`relative overflow-hidden rounded-2xl p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group ${isDark
-                    ? 'bg-[#1E293B]/80 backdrop-blur-xl border border-white/10 shadow-lg shadow-black/20'
-                    : 'bg-white/70 backdrop-blur-md border border-white/50 shadow-lg shadow-slate-200/50'
+                  ? 'bg-[#1E293B]/80 backdrop-blur-xl border border-white/10 shadow-lg shadow-black/20'
+                  : 'bg-white/70 backdrop-blur-md border border-white/50 shadow-lg shadow-slate-200/50'
                   }`}>
                   <div className={`mx-auto w-12 h-12 rounded-xl flex items-center justify-center mb-3 shadow-inner ${isDark
-                      ? 'bg-gradient-to-br from-blue-500/20 to-purple-500/20'
-                      : 'bg-gradient-to-br from-blue-100 to-purple-100'
+                    ? 'bg-gradient-to-br from-blue-500/20 to-purple-500/20'
+                    : 'bg-gradient-to-br from-blue-100 to-purple-100'
                     }`}>
                     <Icon className={`w-6 h-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
                   </div>

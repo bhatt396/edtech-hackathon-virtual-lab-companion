@@ -1,19 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Navbar } from '@/components/common/Navbar';
 import { ExperimentCard } from '@/components/lab/ExperimentCard';
 import { SubjectFilter } from '@/components/lab/SubjectFilter';
+import { JoinClassroomCard } from '@/components/classroom/JoinClassroomCard';
+import { ClassroomCard } from '@/components/classroom/ClassroomCard';
 import { EXPERIMENTS, Subject, Experiment } from '@/utils/constants';
+import { Classroom, getStudentClassrooms } from '@/utils/classroomStorage';
 import {
   Trophy,
   Target,
   Flame,
   Clock,
   Star,
-  Bookmark
+  Users,
+  BookOpen
 } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const studentStats = [
   { label: 'Completed', value: '8', icon: Trophy, color: 'text-secondary' },
@@ -22,23 +25,34 @@ const studentStats = [
   { label: 'Time Spent', value: '4.5h', icon: Clock, color: 'text-accent' },
 ];
 
-// Simulate assigned and completed experiments
-const assignedIds = ['ohms-law', 'acid-base-titration', 'microscope-observation'];
-const completedIds = ['pendulum', 'ph-testing'];
-
 export function StudentDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [selectedSubject, setSelectedSubject] = useState<Subject | 'all'>('all');
 
+  // Classroom State
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+
+  const fetchClassrooms = () => {
+    if (user) {
+      const data = getStudentClassrooms(user.email || user.name);
+      setClassrooms(data);
+    }
+  };
+
+  useEffect(() => {
+    fetchClassrooms();
+  }, [user]);
+
+  const assignedExperimentIds = classrooms.flatMap(c => c.assignedExperimentIds);
+
   const enhancedExperiments: Experiment[] = EXPERIMENTS.map(exp => ({
     ...exp,
-    isAssigned: assignedIds.includes(exp.id),
-    isCompleted: completedIds.includes(exp.id),
+    isAssigned: assignedExperimentIds.includes(exp.id),
+    isCompleted: ['pendulum', 'ph-testing'].includes(exp.id),
   }));
 
   const assignedExperiments = enhancedExperiments.filter(exp => exp.isAssigned);
-  const completedExperiments = enhancedExperiments.filter(exp => exp.isCompleted);
   const allExperiments = selectedSubject === 'all'
     ? enhancedExperiments
     : enhancedExperiments.filter(exp => exp.subject === selectedSubject);
@@ -49,7 +63,7 @@ export function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-[#020617] relative overflow-hidden text-slate-200">
-      {/* Cool Interactive Background Elements */}
+      {/* Background Elements */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
 
@@ -64,11 +78,11 @@ export function StudentDashboard() {
             <span className="text-4xl animate-bounce">🔬</span>
           </div>
           <p className="text-slate-400 text-lg font-medium max-w-2xl leading-relaxed">
-            Ready to dive into the world of science? Your personalized virtual laboratory is all set for today's experiments.
+            Ready to dive into the world of science?
           </p>
         </div>
 
-        {/* Stats Grid */}
+        {/* 1. Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {studentStats.map((stat, index) => (
             <div
@@ -89,108 +103,65 @@ export function StudentDashboard() {
           ))}
         </div>
 
-        {/* Achievement Banner */}
-        <div className="mb-12 p-8 rounded-3xl bg-gradient-to-r from-primary/20 via-blue-600/10 to-purple-600/20 border border-white/10 animate-fade-in shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/30 transition-colors" />
-          <div className="relative flex items-center gap-6">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/20 border border-primary/30 shadow-glow-primary group-hover:rotate-12 transition-transform duration-500">
-              <Star className="h-8 w-8 text-primary" />
-            </div>
+        {/* 2. My Classrooms Section */}
+        <div className="mb-12">
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-6">
             <div>
-              <h3 className="font-display text-2xl font-bold text-white mb-1">
-                Keep up the great work!
-              </h3>
-              <p className="text-slate-400 font-medium">
-                Complete 2 more experiments this week to earn the <span className="text-primary font-bold">Lab Explorer</span> badge
-              </p>
+              <h2 className="font-display text-2xl font-bold text-white flex items-center gap-3">
+                <Users className="h-6 w-6 text-primary" />
+                My Classrooms
+              </h2>
+            </div>
+            <div className="w-full md:w-auto min-w-[300px]">
+              <JoinClassroomCard onClassroomJoined={fetchClassrooms} />
             </div>
           </div>
+
+          {classrooms.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up">
+              {classrooms.map(classroom => (
+                <ClassroomCard key={classroom.id} classroom={classroom} />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Experiments Tabs */}
-        <Tabs defaultValue="assigned" className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <TabsList className="bg-muted">
-              <TabsTrigger value="assigned" className="gap-2">
-                <Bookmark className="h-4 w-4" />
-                Assigned ({assignedExperiments.length})
-              </TabsTrigger>
-              <TabsTrigger value="completed" className="gap-2">
-                <Trophy className="h-4 w-4" />
-                Completed ({completedExperiments.length})
-              </TabsTrigger>
-              <TabsTrigger value="all" className="gap-2">
-                All Experiments
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value="assigned" className="space-y-4">
-            {assignedExperiments.length > 0 ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {assignedExperiments.map((experiment, index) => (
-                  <div
-                    key={experiment.id}
-                    className="animate-slide-up"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <ExperimentCard
-                      experiment={experiment}
-                      onStart={handleStartExperiment}
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <Bookmark className="h-12 w-12 mx-auto mb-3 opacity-40" />
-                <p>No experiments assigned yet.</p>
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="completed" className="space-y-4">
-            {completedExperiments.length > 0 ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {completedExperiments.map((experiment, index) => (
-                  <div
-                    key={experiment.id}
-                    className="animate-slide-up"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <ExperimentCard
-                      experiment={experiment}
-                      onStart={handleStartExperiment}
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <Trophy className="h-12 w-12 mx-auto mb-3 opacity-40" />
-                <p>Complete your first experiment to see it here!</p>
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="all" className="space-y-6">
-            <SubjectFilter selected={selectedSubject} onSelect={setSelectedSubject} />
+        {/* 3. Assigned Experiments Section (Only if present) */}
+        {assignedExperiments.length > 0 && (
+          <div className="mb-12 animate-slide-up">
+            <h2 className="font-display text-2xl font-bold text-white flex items-center gap-3 mb-6">
+              <Star className="h-6 w-6 text-secondary" />
+              Assigned to You
+            </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {allExperiments.map((experiment, index) => (
-                <div
-                  key={experiment.id}
-                  className="animate-slide-up"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <ExperimentCard
-                    experiment={experiment}
-                    onStart={handleStartExperiment}
-                  />
+              {assignedExperiments.map((experiment, index) => (
+                <div key={experiment.id} style={{ animationDelay: `${index * 50}ms` }}>
+                  <ExperimentCard experiment={experiment} onStart={handleStartExperiment} />
                 </div>
               ))}
             </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+        )}
+
+        <div className="h-px bg-white/10 w-full mb-12" />
+
+        {/* 4. All Experiments Section (Always visible) */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h2 className="font-display text-2xl font-bold text-white flex items-center gap-3">
+            <BookOpen className="h-6 w-6 text-white" />
+            Experiment Library
+          </h2>
+          <SubjectFilter selected={selectedSubject} onSelect={setSelectedSubject} />
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {allExperiments.map((experiment, index) => (
+            <div key={experiment.id} className="animate-slide-up" style={{ animationDelay: `${index * 50}ms` }}>
+              <ExperimentCard experiment={experiment} onStart={handleStartExperiment} />
+            </div>
+          ))}
+        </div>
+
       </main>
     </div>
   );

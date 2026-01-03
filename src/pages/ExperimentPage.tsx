@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, Suspense } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import { Navbar } from '@/components/common/Navbar';
 import { ProcedureSteps } from '@/components/lab/ProcedureSteps';
 import { ObservationPanel } from '@/components/lab/ObservationPanel';
@@ -14,15 +15,33 @@ import ProjectileMotion2D from '@/experiments/twoD/ProjectileMotion2D';
 import ProjectileMotionAnimated from '@/experiments/animated/ProjectileMotionAnimated';
 import ProjectileMotion3D from '@/experiments/threeD/ProjectileMotion3D';
 
+// New Imports
+import AcidBaseTitration2D from '@/experiments/twoD/AcidBaseTitration2D';
+import AcidBaseTitration3D from '@/experiments/threeD/AcidBaseTitration3D';
+import AcidBaseTitrationAnimated from '@/experiments/animated/AcidBaseTitrationAnimated';
+import SimplePendulum2D from '@/experiments/twoD/SimplePendulum2D';
+import SimplePendulum3D from '@/experiments/threeD/SimplePendulum3D';
+import SimplePendulumAnimated from '@/experiments/animated/SimplePendulumAnimated';
+import MicroscopeObservation2D from '@/experiments/twoD/MicroscopeObservation2D';
+import MicroscopeObservation3D from '@/experiments/threeD/MicroscopeObservation3D';
+import MicroscopeObservationAnimated from '@/experiments/animated/MicroscopeObservationAnimated';
+import { VivaQuestions } from '@/components/lab/VivaQuestions';
+
 export function ExperimentPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const experiment = EXPERIMENTS.find(e => e.id === id);
 
   // Determine mode type based on experiment
   const isProjectileMotion = experiment?.id === 'projectile-motion';
-  const [mode, setMode] = useState<'2d' | 'animated' | '3d'>(isProjectileMotion ? '2d' : '2d');
+  const isAcidBase = experiment?.id === 'acid-base-titration';
+  const isPendulum = experiment?.id === 'pendulum';
+  const isOhmsLaw = experiment?.id === 'ohms-law';
+  const isMicroscope = experiment?.id === 'microscope-observation';
+
+  const [mode, setMode] = useState<'2d' | 'animated' | '3d'>('2d');
 
   if (!experiment) {
     return (
@@ -44,7 +63,36 @@ export function ExperimentPage() {
   }
 
   // Check if experiment has simulation
-  const hasSimulation = experiment.id === 'ohms-law' || experiment.id === 'projectile-motion';
+  const hasSimulation = isOhmsLaw || isProjectileMotion || isAcidBase || isPendulum || isMicroscope;
+
+  // Helper to render the correct component
+  const renderSimulation = () => {
+    switch (mode) {
+      case '2d':
+        if (isProjectileMotion) return <ProjectileMotion2D />;
+        if (isOhmsLaw) return <OhmsLaw2D />;
+        if (isAcidBase) return <AcidBaseTitration2D />;
+        if (isPendulum) return <SimplePendulum2D />;
+        if (isMicroscope) return <MicroscopeObservation2D />;
+        return null;
+      case '3d':
+        if (isProjectileMotion) return <ProjectileMotion3D />;
+        if (isOhmsLaw) return <SimpleDemo3D />; // Default for now
+        if (isAcidBase) return <AcidBaseTitration3D />;
+        if (isPendulum) return <SimplePendulum3D />;
+        if (isMicroscope) return <MicroscopeObservation3D />;
+        return <SimpleDemo3D />;
+      case 'animated':
+        if (isProjectileMotion) return <ProjectileMotionAnimated />;
+        if (isOhmsLaw) return <OhmsLawAnimated />;
+        if (isAcidBase) return <AcidBaseTitrationAnimated />;
+        if (isPendulum) return <SimplePendulumAnimated />;
+        if (isMicroscope) return <MicroscopeObservationAnimated />;
+        return null;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#020617] relative overflow-hidden text-slate-200">
@@ -59,11 +107,14 @@ export function ExperimentPage() {
         <div className="mb-8 animate-fade-in">
           <Button
             variant="ghost"
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              if (isAuthenticated) navigate(-1);
+              else navigate('/library');
+            }}
             className="mb-6 gap-2 text-slate-400 hover:text-white transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
+            {isAuthenticated ? 'Back to Dashboard' : 'Browse Library'}
           </Button>
 
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
@@ -97,46 +148,18 @@ export function ExperimentPage() {
           <div className="animate-slide-up">
             <div className="mb-4 flex gap-2 items-center justify-between">
               <div className="flex gap-2">
-                {isProjectileMotion ? (
-                  <>
-                    <Button
-                      variant={(mode as string) === '2d' ? 'default' : 'outline'}
-                      onClick={() => setMode('2d')}
-                    >
-                      2D View
-                    </Button>
-                    <Button
-                      variant={(mode as string) === 'animated' ? 'default' : 'outline'}
-                      onClick={() => setMode('animated')}
-                    >
-                      Animated
-                    </Button>
-                    <Button
-                      variant={(mode as string) === '3d' ? 'default' : 'outline'}
-                      onClick={() => setMode('3d')}
-                    >
-                      3D View
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      variant="outline"
-                      onClick={() => setMode('2d')}
-                    >
-                      2D View
-                    </Button>
-                    <Button
-                      variant="default"
-                      onClick={() => setMode('3d')}
-                    >
-                      3D View
-                    </Button>
-                  </>
-                )}
+                <Button variant="outline" onClick={() => setMode('2d')}>
+                  2D View
+                </Button>
+                <Button variant="outline" onClick={() => setMode('animated')}>
+                  Animated
+                </Button>
+                <Button variant="default" onClick={() => setMode('3d')}>
+                  3D View
+                </Button>
               </div>
             </div>
-            {isProjectileMotion ? <ProjectileMotion3D /> : <SimpleDemo3D />}
+            {renderSimulation()}
           </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-6">
@@ -146,58 +169,20 @@ export function ExperimentPage() {
               {hasSimulation ? (
                 <div className="animate-slide-up">
                   <div className="mb-4 flex gap-2">
-                    {isProjectileMotion || experiment?.id === 'ohms-law' ? (
-                      <>
-                        <Button
-                          variant={mode === '2d' ? 'default' : 'outline'}
-                          onClick={() => setMode('2d')}
-                        >
-                          2D View
-                        </Button>
-                        <Button
-                          variant={mode === 'animated' ? 'default' : 'outline'}
-                          onClick={() => setMode('animated')}
-                        >
-                          Animated
-                        </Button>
-                        <Button
-                          variant={mode === '3d' ? 'default' : 'outline'}
-                          onClick={() => setMode('3d')}
-                        >
-                          3D View
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          variant={mode === '2d' ? 'default' : 'outline'}
-                          onClick={() => setMode('2d')}
-                        >
-                          2D View
-                        </Button>
-                        <Button
-                          variant={mode === '3d' ? 'default' : 'outline'}
-                          onClick={() => setMode('3d')}
-                        >
-                          3D View
-                        </Button>
-                      </>
-                    )}
+                    <Button variant={mode === '2d' ? 'default' : 'outline'} onClick={() => setMode('2d')}>
+                      2D View
+                    </Button>
+                    <Button variant={mode === 'animated' ? 'default' : 'outline'} onClick={() => setMode('animated')}>
+                      Animated
+                    </Button>
+                    <Button variant={mode === '3d' ? 'default' : 'outline'} onClick={() => setMode('3d')}>
+                      3D View
+                    </Button>
                   </div>
 
-                  {mode === '2d' ? (
-                    <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                      {isProjectileMotion ? <ProjectileMotion2D /> : <OhmsLaw2D />}
-                    </div>
-                  ) : mode === 'animated' ? (
-                    <div className="animate-fade-in">
-                      {experiment?.id === 'ohms-law' ? <OhmsLawAnimated /> : <ProjectileMotionAnimated />}
-                    </div>
-                  ) : (
-                    <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                      {isProjectileMotion ? <ProjectileMotion3D /> : <SimpleDemo3D />}
-                    </div>
-                  )}
+                  <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                    {renderSimulation()}
+                  </div>
                 </div>
               ) : (
                 <div className="p-8 rounded-xl bg-muted/50 border border-border text-center animate-fade-in">
@@ -214,7 +199,20 @@ export function ExperimentPage() {
               {/* Observation Panel */}
               {hasSimulation && (
                 <div className="animate-slide-up" style={{ animationDelay: '100ms' }}>
-                  <ObservationPanel />
+                  {isAuthenticated ? (
+                    <ObservationPanel />
+                  ) : (
+                    <div className="p-8 rounded-2xl bg-primary/5 border border-primary/20 backdrop-blur-sm text-center">
+                      <Beaker className="h-10 w-10 mx-auto mb-4 text-primary opacity-60" />
+                      <h3 className="text-lg font-semibold text-foreground mb-2">Ready to record results?</h3>
+                      <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
+                        Sign in to use the digital observation notebook and save your experiment data.
+                      </p>
+                      <Button onClick={() => navigate('/login')} className="gap-2">
+                        Sign In to Record
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -257,7 +255,7 @@ export function ExperimentPage() {
               {/* Procedure Steps */}
               {hasSimulation && (
                 <div className="animate-slide-up" style={{ animationDelay: '150ms' }}>
-                  <ProcedureSteps />
+                  <ProcedureSteps steps={experiment.steps} />
                 </div>
               )}
 
@@ -274,6 +272,23 @@ export function ExperimentPage() {
                     </p>
                   </div>
                 </div>
+              </div>
+
+              {/* Viva Questions */}
+              <div className="animate-slide-up" style={{ animationDelay: '250ms' }}>
+                {isAuthenticated ? (
+                  <VivaQuestions experimentId={experiment.id} />
+                ) : (
+                  <div className="p-6 rounded-xl bg-card border border-border text-center">
+                    <h4 className="font-semibold text-foreground mb-2 text-sm">Practice Viva Questions</h4>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      Complete the experiment and test your knowledge.
+                    </p>
+                    <Button variant="outline" size="sm" onClick={() => navigate('/login')} className="w-full text-xs">
+                      Sign In to Take Quiz
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

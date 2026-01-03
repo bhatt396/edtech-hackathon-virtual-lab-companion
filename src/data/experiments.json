@@ -1,0 +1,295 @@
+[
+  {
+    "id": "ohms-law",
+    "title": "Ohm's Law Verification",
+    "subject": "physics",
+    "description": "Verify the relationship between voltage, current, and resistance using a simple circuit.",
+    "difficulty": "easy",
+    "duration": "30 min",
+    "objectives": [
+      "Understand the relationship V = IR",
+      "Measure voltage and current accurately",
+      "Plot V-I characteristics graph"
+    ],
+    "apparatus": ["Battery", "Ammeter", "Voltmeter", "Resistor", "Rheostat", "Connecting wires"],
+    "steps": [
+      {
+        "id": 1,
+        "title": "Set up the circuit",
+        "description": "Connect the battery, ammeter, resistor, and voltmeter in the circuit as shown in the diagram."
+      },
+      {
+        "id": 2,
+        "title": "Adjust the voltage",
+        "description": "Use the voltage slider to set different voltage values and observe the current changes."
+      },
+      {
+        "id": 3,
+        "title": "Record observations",
+        "description": "Note down the voltage (V) and current (I) readings for at least 5 different settings."
+      },
+      {
+        "id": 4,
+        "title": "Calculate resistance",
+        "description": "For each reading, calculate R = V/I and verify it matches the set resistance value."
+      },
+      {
+        "id": 5,
+        "title": "Plot the graph",
+        "description": "Plot V vs I on graph paper. The slope gives the resistance value."
+      },
+      {
+        "id": 6,
+        "title": "Draw conclusions",
+        "description": "Verify that V ∝ I (voltage is directly proportional to current) for a constant resistance."
+      }
+    ]
+  },
+  {
+    "id": "pendulum",
+    "title": "Simple Pendulum",
+    "subject": "physics",
+    "description": "Study the time period of a simple pendulum and verify T = 2π√(L/g).",
+    "difficulty": "easy",
+    "duration": "25 min",
+    "objectives": [
+      "Understand simple harmonic motion",
+      "Measure time period for different lengths",
+      "Calculate acceleration due to gravity"
+    ],
+    "apparatus": ["Pendulum bob", "Thread", "Clamp stand", "Stopwatch", "Meter scale"],
+    "steps": [
+      {
+        "id": 1,
+        "title": "Set up the pendulum",
+        "description": "Attach the bob to the thread and clamp it to the stand. Measure the effective length (L)."
+      },
+      {
+        "id": 2,
+        "title": "Displace the bob",
+        "description": "Pull the bob slightly to one side (small angle) and release it to oscillate."
+      },
+      {
+        "id": 3,
+        "title": "Measure time",
+        "description": "Use a stopwatch to measure the time for 10 or 20 complete oscillations."
+      },
+      {
+        "id": 4,
+        "title": "Calculate Time Period",
+        "description": "Divide total time by number of oscillations to get Time Period (T)."
+      },
+      {
+        "id": 5,
+        "title": "Repeat",
+        "description": "Repeat the experiment for different lengths of the pendulum."
+      },
+      {
+        "id": 6,
+        "title": "Plot Graph",
+        "description": "Plot L vs T² graph to find the value of g."
+      }
+    ]
+  },
+  {
+    "id": "acid-base-titration",
+    "title": "Acid-Base Titration",
+    "subject": "chemistry",
+    "description": "Determine the concentration of an unknown acid using a standard base solution.",
+    "difficulty": "medium",
+    "duration": "45 min",
+    "objectives": [
+      "Understand neutralization reactions",
+      "Use burette and pipette correctly",
+      "Calculate molarity of unknown solution"
+    ],
+    "apparatus": ["Burette", "Pipette", "Conical flask", "Indicator", "Standard NaOH", "Unknown HCl"],
+    "steps": [
+      {
+        "id": 1,
+        "title": "Fill the Burette",
+        "description": "Clean and fill the burette with the standard base solution (NaOH). Note initial reading."
+      },
+      {
+        "id": 2,
+        "title": "Prepare Analyte",
+        "description": "Pipette a known volume of acid (HCl) into a conical flask."
+      },
+      {
+        "id": 3,
+        "title": "Add Indicator",
+        "description": "Add 2-3 drops of phenolphthalein indicator to the acid."
+      },
+      {
+        "id": 4,
+        "title": "Titrate",
+        "description": "Slowly add base from burette to flask with swirling until a faint pink color persists."
+      },
+      {
+        "id": 5,
+        "title": "Record Reading",
+        "description": "Note the final burette reading. Calculate volume of base used."
+      },
+      {
+        "id": 6,
+        "title": "Calculate",
+        "description": "Use M1V1 = M2V2 to calculate the molarity of the acid."
+      }
+    ]
+  },
+  {
+    "id": "ph-testing",
+    "title": "pH Testing of Solutions",
+    "subject": "chemistry",
+    "description": "Test and classify various solutions as acidic, basic, or neutral using pH indicators.",
+    "difficulty": "easy",
+    "duration": "20 min",
+    "objectives": [
+      "Understand pH scale",
+      "Use universal indicator",
+      "Classify common household solutions"
+    ],
+    "apparatus": ["pH paper", "Universal indicator", "Test tubes", "Sample solutions"],
+    "steps": [
+      {
+        "id": 1,
+        "title": "Prepare samples",
+        "description": "Take small amounts of different solutions in separate test tubes."
+      },
+      {
+        "id": 2,
+        "title": "Test with pH paper",
+        "description": "Dip a strip of pH paper into each solution and observe the color change."
+      },
+      {
+        "id": 3,
+        "title": "Compare with chart",
+        "description": "Match the color with the standard pH color chart to determine pH value."
+      },
+      {
+        "id": 4,
+        "title": "Classify",
+        "description": "Classify as acidic (pH < 7), neutral (pH = 7), or basic (pH > 7)."
+      }
+    ]
+  },
+  {
+    "id": "microscope-observation",
+    "title": "Microscope Cell Observation",
+    "subject": "biology",
+    "description": "Observe plant and animal cells under a microscope and identify key structures.",
+    "difficulty": "easy",
+    "duration": "35 min",
+    "objectives": [
+      "Learn microscope operation",
+      "Identify cell structures",
+      "Compare plant and animal cells"
+    ],
+    "apparatus": ["Compound microscope", "Glass slides", "Cover slips", "Stain", "Onion cells", "Cheek cells"],
+    "steps": [
+      {
+        "id": 1,
+        "title": "Prepare Onion Slide",
+        "description": "Peel a thin layer of onion epidermis, stain with iodine, and cover with a cover slip."
+      },
+      {
+        "id": 2,
+        "title": "Observe Onion Cells",
+        "description": "Place slide on stage, focus under low power, then high power. Look for cell wall."
+      },
+      {
+        "id": 3,
+        "title": "Prepare Cheek Slide",
+        "description": "Gently scrape inside cheek, smear on slide, stain with methylene blue."
+      },
+      {
+        "id": 4,
+        "title": "Observe Cheek Cells",
+        "description": "Focus and observe irregular shapes and nucleus. Note absence of cell wall."
+      }
+    ]
+  },
+  {
+    "id": "photosynthesis",
+    "title": "Photosynthesis Experiment",
+    "subject": "biology",
+    "description": "Demonstrate oxygen production during photosynthesis using aquatic plants.",
+    "difficulty": "medium",
+    "duration": "40 min",
+    "objectives": [
+      "Understand photosynthesis process",
+      "Measure oxygen bubble production",
+      "Analyze effect of light intensity"
+    ],
+    "apparatus": ["Aquatic plant", "Beaker", "Funnel", "Test tube", "Light source", "Sodium bicarbonate"],
+    "steps": [
+      {
+        "id": 1,
+        "title": "Set up apparatus",
+        "description": "Place aquatic plant in a beaker with water and NaHCO3. Invert funnel over it."
+      },
+      {
+        "id": 2,
+        "title": "Collect gas",
+        "description": "Invert a water-filled test tube over the funnel stem."
+      },
+      {
+        "id": 3,
+        "title": "Expose to light",
+        "description": "Place the setup in sunlight or strong artificial light."
+      },
+      {
+        "id": 4,
+        "title": "Observe bubbles",
+        "description": "Observe gas bubbles rising from the plant, displacing water in the test tube."
+      },
+      {
+        "id": 5,
+        "title": "Test gas",
+        "description": "Test the collected gas with a glowing splint (it should relight, indicating Oxygen)."
+      }
+    ]
+  },
+  {
+    "id": "projectile-motion",
+    "title": "Projectile Motion",
+    "subject": "physics",
+    "description": "Study the motion of projectiles and analyze trajectory, range, maximum height, and time of flight.",
+    "difficulty": "medium",
+    "duration": "45 min",
+    "objectives": [
+      "Understand projectile motion equations",
+      "Analyze the effect of launch angle on range",
+      "Calculate maximum height and time of flight",
+      "Visualize trajectory in 2D and 3D"
+    ],
+    "apparatus": ["Projectile launcher", "Measuring tape", "Protractor", "Stopwatch", "Target board", "Safety goggles"],
+    "steps": [
+      {
+        "id": 1,
+        "title": "Setup Launcher",
+        "description": "Clamp the projectile launcher to the table edge and adjust angle."
+      },
+      {
+        "id": 2,
+        "title": "Launch Projectile",
+        "description": "Place ball in launcher and fire. Ensure safety area is clear."
+      },
+      {
+        "id": 3,
+        "title": "Measure Range",
+        "description": "Mark the landing point and measure horizontal distance from launch point."
+      },
+      {
+        "id": 4,
+        "title": "Vary Angle",
+        "description": "Change angle by 15 degrees steps and repeat launch to compare ranges."
+      },
+      {
+        "id": 5,
+        "title": "Record Data",
+        "description": "Record angle, range, and time of flight for each trial."
+      }
+    ]
+  }
+]
