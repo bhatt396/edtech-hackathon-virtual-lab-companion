@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { FlaskConical, Boxes, ClipboardList, Download } from 'lucide-react';
-import { useState } from 'react';
+import { FlaskConical, Boxes, ClipboardList, Download, Sun, Moon } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { MolecularLogo } from '@/components/MolecularLogo';
 
@@ -9,6 +9,10 @@ export function LandingPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [language, setLanguage] = useState<'nepali' | 'english'>('english');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  // Effect to handle theme class on document body if needed, or just specific to this page container
+  // For now, we'll keep it contained to the LandingPage component div
 
   const handleGuestAccess = () => {
     login('guest@virtuallab.com', 'student', 'Guest User');
@@ -38,128 +42,162 @@ export function LandingPage() {
     },
   ];
 
+  const isDark = theme === 'dark';
+
   return (
-    <div className="min-h-screen relative overflow-hidden bg-slate-900">
-      <img
-        src="/background.png"
-        alt="Virtual Lab Background"
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70" />
+    <div className={`min-h-screen flex flex-col transition-colors duration-500 ${isDark ? 'bg-[#0F172A]' : 'bg-slate-50'}`}>
 
-      <div className="relative z-10 container mx-auto px-4 py-4 flex flex-col min-h-screen">
-        {/* Top Header Section - Pushed to the edges to negate container padding */}
-        <div className="relative flex items-center justify-between h-20 mb-8 px-0 -mx-4 md:-mx-6">
-          {/* Logo & Brand - Moved further Left as requested */}
-          <div className="flex items-center gap-4 -ml-6 md:-ml-8">
-            <MolecularLogo size={35} />
-            <div className="text-left">
-              <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] mb-0 leading-tight tracking-tight">
-                VIRTUAL LAB
-              </h1>
-              <p className="text-lg md:text-xl text-white/90 font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] tracking-widest uppercase">
-                Simulator
-              </p>
-            </div>
+      {/* 1. Distinct Top Header Bar */}
+      <nav className={`w-full h-16 px-6 flex items-center justify-between border-b z-50 transition-colors ${isDark
+          ? 'bg-[#0B1120] border-white/5'
+          : 'bg-white border-slate-200'
+        }`}>
+        {/* Left: Logo */}
+        <div className="flex items-center gap-3">
+          <MolecularLogo size={32} />
+          <div className="flex flex-col">
+            <h1 className={`text-lg font-black tracking-tighter leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              VIRTUAL LAB
+            </h1>
+            <span className={`text-[10px] font-bold tracking-[0.2em] uppercase ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+              Simulator
+            </span>
           </div>
+        </div>
 
-          {/* Navigation & Login - Right */}
-          <div className="flex items-center gap-6">
+        {/* Right: Navigation & Actions */}
+        <div className="flex items-center gap-6">
+          <a href="#" className={`text-sm font-medium hover:text-blue-500 transition-colors hidden md:block ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            Tutorials
+          </a>
+
+          {/* Theme Toggle Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(isDark ? 'light' : 'dark')}
+            className={`rounded-full w-9 h-9 transition-colors ${isDark ? 'text-yellow-400 hover:bg-white/10' : 'text-slate-600 hover:bg-slate-100'}`}
+          >
+            {isDark ? <Sun className="w-5 h-5 fill-yellow-400" /> : <Moon className="w-5 h-5 fill-slate-600" />}
+          </Button>
+
+          <div className="h-6 w-px bg-slate-700/50 hidden md:block" />
+
+          <div className="flex gap-3">
             <button
               onClick={handleGuestAccess}
-              className="hidden md:block text-white/80 hover:text-white transition-colors underline font-medium drop-shadow-lg text-sm"
+              className={`hidden md:block text-xs font-bold uppercase tracking-wider hover:underline transition-all ${isDark ? 'text-slate-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}
             >
-              Try as Guest
+              Try Guest
             </button>
-            <div className="flex gap-3">
-              <Button
-                onClick={() => navigate('/login')}
-                size="sm"
-                className="px-5 py-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all"
-              >
-                Log In
-              </Button>
-              <Button
-                onClick={() => navigate('/login')}
-                size="sm"
-                variant="outline"
-                className="px-5 py-2 text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-md transition-all"
-              >
-                Sign Up
-              </Button>
-            </div>
+            <Button
+              onClick={() => navigate('/login')}
+              size="sm"
+              className="px-6 font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/25 border-0"
+            >
+              Log In
+            </Button>
+            <Button
+              onClick={() => navigate('/login')}
+              size="sm"
+              variant="outline"
+              className={`px-6 font-semibold ${isDark
+                  ? 'bg-transparent border-slate-600 text-slate-200 hover:bg-white/10 hover:text-white'
+                  : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
+                }`}
+            >
+              Sign Up
+            </Button>
           </div>
         </div>
+      </nav>
 
-        {/* Marquee Slogan - Moved further down to completely avoid overlap */}
-        <div className="relative bg-white/5 backdrop-blur-xl rounded-full py-3 px-8 max-w-5xl mx-auto shadow-[0_0_30px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden mb-12 mt-4">
-          <style dangerouslySetInnerHTML={{
-            __html: `
-              @keyframes marquee {
-                0% { transform: translateX(100%); }
-                100% { transform: translateX(-100%); }
-              }
-              .marquee {
-                display: inline-block;
-                white-space: nowrap;
-                animation: marquee 30s linear infinite;
-              }
-              .marquee-container:hover .marquee {
-                animation-play-state: paused;
-              }
-            `}} />
-          <div className="marquee-container">
-            <h2 className="marquee text-lg md:text-xl font-medium text-blue-100/90 tracking-wide drop-shadow-sm">
-              ✨ Learn & Experiment Like Never Before! • For Nepali +2 Students to Explore Science Practically! ✨
-            </h2>
-          </div>
+      {/* 2. Main Hero Section */}
+      <main className="relative flex-1 flex flex-col items-center justify-center w-full overflow-hidden">
+        {/* Background Image & Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/background.png"
+            alt="Lab Background"
+            className={`w-full h-full object-cover transition-all duration-700 ${isDark
+                ? 'brightness-[0.85] contrast-[1.1]'
+                : 'brightness-[1.05] contrast-[0.95] opacity-90'
+              }`}
+          />
+          {/* Content Overlay Gradient */}
+          <div className={`absolute inset-0 bg-gradient-to-t ${isDark
+              ? 'from-[#0F172A] via-[#0F172A]/40 to-transparent'
+              : 'from-slate-50 via-slate-50/40 to-transparent'
+            }`} />
         </div>
 
-        {/* Spacer to push grid to bottom */}
-        <div className="flex-grow"></div>
+        {/* Hero Content Container */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center h-full pt-10 pb-6">
 
+          {/* Marquee Pill */}
+          <div className={`mb-6 py-1.5 px-6 rounded-full border backdrop-blur-md shadow-lg max-w-2xl w-full overflow-hidden flex justify-center ${isDark
+              ? 'bg-[#1e293b]/60 border-white/10 text-blue-200'
+              : 'bg-white/60 border-slate-200 text-slate-700'
+            }`}>
+            <span className="truncate text-sm font-medium tracking-wide">
+              ✨ Learn & Experiment Like Never Before! • For Nepali +2 Students!
+            </span>
+          </div>
 
+          {/* Main Titles */}
+          <div className="text-center space-y-4 max-w-4xl mb-auto mt-4">
+            <h1 className={`text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] drop-shadow-xl ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              Revolutionizing Science <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                Education Virtually.
+              </span>
+            </h1>
+            <p className={`text-lg md:text-2xl font-bold max-w-2xl mx-auto leading-relaxed drop-shadow-md ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+              Step into a high-fidelity virtual laboratory. Conduct experiments, visualize molecular structures, and master concepts with immersive interactivity.
+            </p>
+          </div>
 
-        {/* Features Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8 mt-4">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <div key={index} className="flex flex-col items-center text-center bg-black/30 backdrop-blur-md rounded-xl p-3 md:p-4 border border-white/10 shadow-xl hover:bg-black/40 transition-all">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-2 shadow-lg hover:scale-110 transition-transform">
-                  <Icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
+          {/* Feature Cards Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mt-8 mb-8">
+            {features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <div key={index} className={`relative overflow-hidden rounded-2xl p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group ${isDark
+                    ? 'bg-[#1E293B]/80 backdrop-blur-xl border border-white/10 shadow-lg shadow-black/20'
+                    : 'bg-white/70 backdrop-blur-md border border-white/50 shadow-lg shadow-slate-200/50'
+                  }`}>
+                  <div className={`mx-auto w-12 h-12 rounded-xl flex items-center justify-center mb-3 shadow-inner ${isDark
+                      ? 'bg-gradient-to-br from-blue-500/20 to-purple-500/20'
+                      : 'bg-gradient-to-br from-blue-100 to-purple-100'
+                    }`}>
+                    <Icon className={`w-6 h-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                  </div>
+                  <h3 className={`text-xs font-black uppercase tracking-widest mb-1 ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                    {feature.title}
+                  </h3>
+                  <p className={`text-[10px] leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="font-semibold text-xs md:text-sm text-white mb-1 drop-shadow-lg">
-                  {feature.title}
-                </h3>
-                <p className="text-xs text-white/80 hidden md:block drop-shadow-md">
-                  {feature.description}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-
-
-
-        {/* Footer Section */}
-        <div className="mt-auto pt-4">
-          <div className="bg-black/30 backdrop-blur-md rounded-2xl p-3 md:p-4 border border-white/10 shadow-xl">
-            <div className="flex items-center justify-center text-sm text-white">
-              <div className="flex items-center gap-2">
-                <span className="font-medium drop-shadow-lg">Language:</span>
-                <button
-                  onClick={() => setLanguage(language === 'english' ? 'nepali' : 'english')}
-                  className="px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors font-medium backdrop-blur-sm border border-white/20 shadow-lg"
-                >
-                  {language === 'english' ? 'English' : 'नयनी / English'}
-                </button>
-              </div>
-            </div>
+              );
+            })}
           </div>
+
+          {/* Footer / Language */}
+          <div className={`mt-auto py-2 px-6 rounded-full backdrop-blur-md border shadow-lg flex items-center gap-3 ${isDark ? 'bg-black/40 border-white/10 text-sm text-slate-300' : 'bg-white/60 border-slate-200 text-sm text-slate-600'
+            }`}>
+            <span className="font-semibold">Language:</span>
+            <button
+              onClick={() => setLanguage(language === 'english' ? 'nepali' : 'english')}
+              className={`px-3 py-1 rounded bg-white/10 hover:bg-white/20 transition-colors font-medium border border-white/10`}
+            >
+              {language === 'english' ? 'English' : 'नयनी'}
+            </button>
+          </div>
+
         </div>
-      </div>
-    </div >
+      </main>
+    </div>
   );
 }
 

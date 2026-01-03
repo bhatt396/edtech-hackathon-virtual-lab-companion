@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Info, Clock, Target, Beaker } from 'lucide-react';
 import SimpleDemo3D from '@/experiments/threeD/SimpleDemo3D';
 import OhmsLaw2D from '@/experiments/twoD/OhmsLaw2D';
+import OhmsLawAnimated from '@/experiments/animated/OhmsLawAnimated';
 import ProjectileMotion2D from '@/experiments/twoD/ProjectileMotion2D';
 import ProjectileMotionAnimated from '@/experiments/animated/ProjectileMotionAnimated';
 import ProjectileMotion3D from '@/experiments/threeD/ProjectileMotion3D';
@@ -145,7 +146,7 @@ export function ExperimentPage() {
               {hasSimulation ? (
                 <div className="animate-slide-up">
                   <div className="mb-4 flex gap-2">
-                    {isProjectileMotion ? (
+                    {isProjectileMotion || experiment?.id === 'ohms-law' ? (
                       <>
                         <Button
                           variant={mode === '2d' ? 'default' : 'outline'}
@@ -185,15 +186,15 @@ export function ExperimentPage() {
                   </div>
 
                   {mode === '2d' ? (
-                    <div>
+                    <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
                       {isProjectileMotion ? <ProjectileMotion2D /> : <OhmsLaw2D />}
                     </div>
                   ) : mode === 'animated' ? (
-                    <div>
-                      <ProjectileMotionAnimated />
+                    <div className="animate-fade-in">
+                      {experiment?.id === 'ohms-law' ? <OhmsLawAnimated /> : <ProjectileMotionAnimated />}
                     </div>
                   ) : (
-                    <div>
+                    <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
                       {isProjectileMotion ? <ProjectileMotion3D /> : <SimpleDemo3D />}
                     </div>
                   )}
