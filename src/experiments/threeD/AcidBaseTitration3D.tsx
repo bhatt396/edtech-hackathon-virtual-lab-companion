@@ -229,6 +229,25 @@ export default function AcidBaseTitration3D() {
         <div className="flex flex-col h-full w-full">
             <div className="flex-1 relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-xl overflow-hidden border border-border shadow-2xl min-h-[500px]">
                 <Canvas shadows camera={{ position: [5, 5, 5], fov: 45 }}>
+                    {/* Lighting for realistic shadows */}
+                    <ambientLight intensity={0.3} />
+                    <directionalLight
+                        castShadow
+                        intensity={1.2}
+                        position={[5, 10, 5]}
+                        shadow-mapSize-width={1024}
+                        shadow-mapSize-height={1024}
+                        shadow-camera-far={50}
+                        shadow-camera-left={-10}
+                        shadow-camera-right={10}
+                        shadow-camera-top={10}
+                        shadow-camera-bottom={-10}
+                    />
+                    {/* Ground plane to receive shadows */}
+                    <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.6, 0]}>
+                        <planeGeometry args={[20, 20]} />
+                        <shadowMaterial opacity={0.4} />
+                    </mesh>
                     <TitrationScene state={state} setState={setState} />
                 </Canvas>
             </div>

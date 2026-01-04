@@ -26,6 +26,7 @@ import MicroscopeObservation2D from '@/experiments/twoD/MicroscopeObservation2D'
 import MicroscopeObservation3D from '@/experiments/threeD/MicroscopeObservation3D';
 import MicroscopeObservationAnimated from '@/experiments/animated/MicroscopeObservationAnimated';
 import { VivaQuestions } from '@/components/lab/VivaQuestions';
+import { ExperimentAssistant } from '@/components/lab/ExperimentAssistant';
 
 export function ExperimentPage() {
   const { id } = useParams();
@@ -200,7 +201,7 @@ export function ExperimentPage() {
               {hasSimulation && (
                 <div className="animate-slide-up" style={{ animationDelay: '100ms' }}>
                   {isAuthenticated ? (
-                    <ObservationPanel />
+                    <ObservationPanel experimentId={id} />
                   ) : (
                     <div className="p-8 rounded-2xl bg-primary/5 border border-primary/20 backdrop-blur-sm text-center">
                       <Beaker className="h-10 w-10 mx-auto mb-4 text-primary opacity-60" />
@@ -290,6 +291,7 @@ export function ExperimentPage() {
                   </div>
                 )}
               </div>
+              <ExperimentAssistant experiment={experiment} />
             </div>
           </div>
         )}
