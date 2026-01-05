@@ -11,7 +11,14 @@
       "Measure voltage and current accurately",
       "Plot V-I characteristics graph"
     ],
-    "apparatus": ["Battery", "Ammeter", "Voltmeter", "Resistor", "Rheostat", "Connecting wires"],
+    "apparatus": [
+      "Battery",
+      "Ammeter",
+      "Voltmeter",
+      "Resistor",
+      "Rheostat",
+      "Connecting wires"
+    ],
     "steps": [
       {
         "id": 1,
@@ -57,7 +64,13 @@
       "Measure time period for different lengths",
       "Calculate acceleration due to gravity"
     ],
-    "apparatus": ["Pendulum bob", "Thread", "Clamp stand", "Stopwatch", "Meter scale"],
+    "apparatus": [
+      "Pendulum bob",
+      "Thread",
+      "Clamp stand",
+      "Stopwatch",
+      "Meter scale"
+    ],
     "steps": [
       {
         "id": 1,
@@ -103,7 +116,14 @@
       "Use burette and pipette correctly",
       "Calculate molarity of unknown solution"
     ],
-    "apparatus": ["Burette", "Pipette", "Conical flask", "Indicator", "Standard NaOH", "Unknown HCl"],
+    "apparatus": [
+      "Burette",
+      "Pipette",
+      "Conical flask",
+      "Indicator",
+      "Standard NaOH",
+      "Unknown HCl"
+    ],
     "steps": [
       {
         "id": 1,
@@ -149,7 +169,12 @@
       "Use universal indicator",
       "Classify common household solutions"
     ],
-    "apparatus": ["pH paper", "Universal indicator", "Test tubes", "Sample solutions"],
+    "apparatus": [
+      "pH paper",
+      "Universal indicator",
+      "Test tubes",
+      "Sample solutions"
+    ],
     "steps": [
       {
         "id": 1,
@@ -185,7 +210,14 @@
       "Identify cell structures",
       "Compare plant and animal cells"
     ],
-    "apparatus": ["Compound microscope", "Glass slides", "Cover slips", "Stain", "Onion cells", "Cheek cells"],
+    "apparatus": [
+      "Compound microscope",
+      "Glass slides",
+      "Cover slips",
+      "Stain",
+      "Onion cells",
+      "Cheek cells"
+    ],
     "steps": [
       {
         "id": 1,
@@ -221,7 +253,14 @@
       "Measure oxygen bubble production",
       "Analyze effect of light intensity"
     ],
-    "apparatus": ["Aquatic plant", "Beaker", "Funnel", "Test tube", "Light source", "Sodium bicarbonate"],
+    "apparatus": [
+      "Aquatic plant",
+      "Beaker",
+      "Funnel",
+      "Test tube",
+      "Light source",
+      "Sodium bicarbonate"
+    ],
     "steps": [
       {
         "id": 1,
@@ -254,42 +293,69 @@
     "id": "projectile-motion",
     "title": "Projectile Motion",
     "subject": "physics",
-    "description": "Study the motion of projectiles and analyze trajectory, range, maximum height, and time of flight.",
+    "description": "Study the motion of projectiles launched at different angles and velocities.",
     "difficulty": "medium",
-    "duration": "45 min",
+    "duration": "35 min",
     "objectives": [
-      "Understand projectile motion equations",
-      "Analyze the effect of launch angle on range",
-      "Calculate maximum height and time of flight",
-      "Visualize trajectory in 2D and 3D"
+      "Understand parabolic trajectory",
+      "Calculate range and maximum height",
+      "Analyze effect of launch angle"
     ],
-    "apparatus": ["Projectile launcher", "Measuring tape", "Protractor", "Stopwatch", "Target board", "Safety goggles"],
+    "apparatus": [
+      "Projectile launcher",
+      "Protractor",
+      "Measuring tape",
+      "Timer"
+    ],
     "steps": [
       {
         "id": 1,
-        "title": "Setup Launcher",
-        "description": "Clamp the projectile launcher to the table edge and adjust angle."
+        "title": "Set launch angle",
+        "description": "Adjust the launcher to the desired angle (typically 15°, 30°, 45°, 60°, or 75°)."
       },
       {
         "id": 2,
-        "title": "Launch Projectile",
-        "description": "Place ball in launcher and fire. Ensure safety area is clear."
+        "title": "Set initial velocity",
+        "description": "Configure the initial velocity of the projectile using the velocity slider."
       },
       {
         "id": 3,
-        "title": "Measure Range",
-        "description": "Mark the landing point and measure horizontal distance from launch point."
+        "title": "Launch projectile",
+        "description": "Click the launch button and observe the parabolic trajectory."
       },
       {
         "id": 4,
-        "title": "Vary Angle",
-        "description": "Change angle by 15 degrees steps and repeat launch to compare ranges."
+        "title": "Record data",
+        "description": "Note the range, maximum height, and time of flight from the display."
       },
       {
         "id": 5,
-        "title": "Record Data",
-        "description": "Record angle, range, and time of flight for each trial."
+        "title": "Vary parameters",
+        "description": "Repeat with different angles and velocities to compare results."
+      },
+      {
+        "id": 6,
+        "title": "Analyze",
+        "description": "Verify that maximum range occurs at 45° for level ground launching."
       }
     ]
+  },
+  {
+    "id": "solar-system",
+    "title": "Solar System Visualization",
+    "subject": "physics",
+    "description": "Explore the solar system with rotating planets and realistic lighting.",
+    "difficulty": "easy",
+    "duration": "15 min",
+    "objectives": [
+      "Understand planetary orbits",
+      "Observe relative sizes",
+      "Interact with 3D view"
+    ],
+    "apparatus": [
+      "3D Renderer",
+      "Orbit Controls"
+    ],
+    "steps": []
   }
 ]

@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, Pause } from 'lucide-react';

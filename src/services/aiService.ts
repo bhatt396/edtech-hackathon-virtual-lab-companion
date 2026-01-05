@@ -4,13 +4,43 @@ import { Experiment } from '@/utils/constants';
  * Generates AI-powered responses using Google's Gemini API.
  * Returns a friendly answer scoped to the given experiment.
  */
+// Hardcoded "Dummy" AI Knowledge Base for Acid-Base Titration
+const ACID_BASE_QA: Record<string, string> = {
+    "explain about this experiment": "In this Acid-Base Titration experiment, you are determining the concentration of an unknown acid (HCl) by reacting it with a strong base (NaOH) of known concentration. The goal is to find the exact point (neutralization) where the acid is completely reacted, indicated by a color change.",
+    "what is an indicator": "An indicator is a substance that changes color at a specific pH level. In this experiment, we use Phenolphthalein. It is colorless in acidic solutions and turns pale pink in basic solutions (around pH 8.2).",
+    "how do i calculate molarity": "You can calculate molarity using the formula: M₁V₁ = M₂V₂. \n\n• M₁ = Molarity of Acid (Unknown)\n• V₁ = Volume of Acid (fixed, e.g., 20mL)\n• M₂ = Molarity of Base (Known)\n• V₂ = Volume of Base used (from Burette reading)\n\nRearrange to solve for M₁: M₁ = (M₂ × V₂) / V₁",
+    "when should i stop titrating": "You should stop titrating (adding base) immediately when you see a faint, permanent pink color appear in the flask. This is the 'endpoint', indicating that neutralization is complete.",
+    "safety precautions": "Always wear safety goggles and a lab coat. Handle acids and bases carefully as they can be corrosive. If you spill any on your skin, wash it immediately with plenty of water.",
+    "what is the endpoint": "The endpoint is the stage in the titration where the indicator changes color, signaling that the equivalent amount of titrant has been added to the analyte."
+};
+
 export async function generateAIResponse(
     question: string,
     experiment: Experiment
 ): Promise<string> {
+    // 1. Check for Hardcoded "Dummy" Responses for Acid-Base Titration
+    if (experiment.id === 'acid-base-titration') {
+        const normalizedQuestion = question.toLowerCase().trim();
+
+        // Simple fuzzy match: check if the question contains key phrases from our DB
+        const matchKey = Object.keys(ACID_BASE_QA).find(key => normalizedQuestion.includes(key) || key.includes(normalizedQuestion));
+
+        if (matchKey || normalizedQuestion.includes('explain') || normalizedQuestion.includes('experiment')) {
+            // Simulate "AI Thinking" delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            if (normalizedQuestion.includes('explain') || normalizedQuestion.includes('experiment')) {
+                return ACID_BASE_QA["explain about this experiment"];
+            }
+            return ACID_BASE_QA[matchKey!];
+        }
+    }
+
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
     if (!apiKey) {
+        // Fallback if no API key is present, ensuring the dummy mode still feels "smart" for other basic queries
+        if (experiment.id === 'acid-base-titration') return "I can specifically answer questions about molarity, indicators, and the endpoint for this experiment. Try asking!";
         return 'AI assistant is not configured. Please add VITE_GEMINI_API_KEY to your .env.local file.';
     }
 
@@ -60,10 +90,16 @@ Student's question: ${question}
                     ],
                     generationConfig: {
                         temperature: 0.7,
-                        maxOutputTokens: 200,
+                        maxOutputTokens: 500,
                         topP: 0.8,
                         topK: 40,
                     },
+                    safetySettings: [
+                        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
+                        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' },
+                        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
+                        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
+                    ]
                 }),
             }
         );

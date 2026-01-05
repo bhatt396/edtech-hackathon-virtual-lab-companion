@@ -1,4 +1,6 @@
-import { useParams, useNavigate } from 'react-router-dom';
+"use client";
+
+import { useParams, useRouter } from 'next/navigation';
 import { useState, Suspense } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Navbar } from '@/components/common/Navbar';
@@ -28,9 +30,16 @@ import MicroscopeObservationAnimated from '@/experiments/animated/MicroscopeObse
 import { VivaQuestions } from '@/components/lab/VivaQuestions';
 import { ExperimentAssistant } from '@/components/lab/ExperimentAssistant';
 
+import SolarSystem3D from '@/experiments/threeD/SolarSystem3D';
+import SolarSystemAnimated from '@/experiments/animated/SolarSystemAnimated';
+import OhmsLawLabInteractive from '@/experiments/interactive/OhmsLawLabInteractive';
+
+// ... (existing imports)
+
 export function ExperimentPage() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const params = useParams();
+  const id = params?.id as string;
+  const router = useRouter();
   const { isAuthenticated } = useAuth();
 
   const experiment = EXPERIMENTS.find(e => e.id === id);
@@ -41,30 +50,16 @@ export function ExperimentPage() {
   const isPendulum = experiment?.id === 'pendulum';
   const isOhmsLaw = experiment?.id === 'ohms-law';
   const isMicroscope = experiment?.id === 'microscope-observation';
+  const isSolarSystem = experiment?.id === 'solar-system';
 
-  const [mode, setMode] = useState<'2d' | 'animated' | '3d'>('2d');
+  const [mode, setMode] = useState<'2d' | 'animated' | '3d' | 'interactive'>(isSolarSystem ? '3d' : '2d');
 
   if (!experiment) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main className="container py-8">
-          <div className="text-center py-20">
-            <h1 className="text-2xl font-display font-bold text-foreground mb-2">
-              Experiment not found
-            </h1>
-            <p className="text-muted-foreground mb-6">
-              The experiment you're looking for doesn't exist.
-            </p>
-            <Button onClick={() => navigate(-1)}>Go Back</Button>
-          </div>
-        </main>
-      </div>
-    );
+    // ... (existing 404 block)
   }
 
   // Check if experiment has simulation
-  const hasSimulation = isOhmsLaw || isProjectileMotion || isAcidBase || isPendulum || isMicroscope;
+  const hasSimulation = isOhmsLaw || isProjectileMotion || isAcidBase || isPendulum || isMicroscope || isSolarSystem;
 
   // Helper to render the correct component
   const renderSimulation = () => {
@@ -75,6 +70,7 @@ export function ExperimentPage() {
         if (isAcidBase) return <AcidBaseTitration2D />;
         if (isPendulum) return <SimplePendulum2D />;
         if (isMicroscope) return <MicroscopeObservation2D />;
+        if (isSolarSystem) return <div className="text-center p-10 text-muted-foreground">2D mode not available for Solar System. Please switch to 3D.</div>;
         return null;
       case '3d':
         if (isProjectileMotion) return <ProjectileMotion3D />;
@@ -82,6 +78,7 @@ export function ExperimentPage() {
         if (isAcidBase) return <AcidBaseTitration3D />;
         if (isPendulum) return <SimplePendulum3D />;
         if (isMicroscope) return <MicroscopeObservation3D />;
+        if (isSolarSystem) return <SolarSystem3D />;
         return <SimpleDemo3D />;
       case 'animated':
         if (isProjectileMotion) return <ProjectileMotionAnimated />;
@@ -89,6 +86,10 @@ export function ExperimentPage() {
         if (isAcidBase) return <AcidBaseTitrationAnimated />;
         if (isPendulum) return <SimplePendulumAnimated />;
         if (isMicroscope) return <MicroscopeObservationAnimated />;
+        if (isSolarSystem) return <SolarSystemAnimated />;
+        return null;
+      case 'interactive':
+        if (isOhmsLaw) return <OhmsLawLabInteractive />;
         return null;
       default:
         return null;
@@ -109,8 +110,8 @@ export function ExperimentPage() {
           <Button
             variant="ghost"
             onClick={() => {
-              if (isAuthenticated) navigate(-1);
-              else navigate('/library');
+              if (isAuthenticated) router.back();
+              else router.push('/library');
             }}
             className="mb-6 gap-2 text-slate-400 hover:text-white transition-colors"
           >
@@ -149,15 +150,12 @@ export function ExperimentPage() {
           <div className="animate-slide-up">
             <div className="mb-4 flex gap-2 items-center justify-between">
               <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setMode('2d')}>
-                  2D View
-                </Button>
-                <Button variant="outline" onClick={() => setMode('animated')}>
-                  Animated
-                </Button>
-                <Button variant="default" onClick={() => setMode('3d')}>
-                  3D View
-                </Button>
+                <Button variant={mode === '2d' ? 'default' : 'outline'} onClick={() => setMode('2d')}>2D View</Button>
+                <Button variant={mode === 'animated' ? 'default' : 'outline'} onClick={() => setMode('animated')}>Animated</Button>
+                <Button variant={mode === '3d' ? 'default' : 'outline'} onClick={() => setMode('3d')}>3D View</Button>
+                {isOhmsLaw && (
+                  <Button variant={mode === 'interactive' ? 'default' : 'outline'} onClick={() => setMode('interactive')}>Interactive</Button>
+                )}
               </div>
             </div>
             {renderSimulation()}
@@ -209,7 +207,7 @@ export function ExperimentPage() {
                       <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
                         Sign in to use the digital observation notebook and save your experiment data.
                       </p>
-                      <Button onClick={() => navigate('/login')} className="gap-2">
+                      <Button onClick={() => router.push('/login')} className="gap-2">
                         Sign In to Record
                       </Button>
                     </div>
@@ -244,13 +242,17 @@ export function ExperimentPage() {
                   <Beaker className="h-4 w-4 text-secondary" />
                   Apparatus Required
                 </h3>
-                <div className="flex flex-wrap gap-2">
-                  {experiment.apparatus.map((item, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {item}
-                    </Badge>
-                  ))}
-                </div>
+                {isOhmsLaw ? (
+                  <OhmsLawLabInteractive />
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {experiment.apparatus.map((item, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs">
+                        {item}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Procedure Steps */}
@@ -285,7 +287,7 @@ export function ExperimentPage() {
                     <p className="text-xs text-muted-foreground mb-4">
                       Complete the experiment and test your knowledge.
                     </p>
-                    <Button variant="outline" size="sm" onClick={() => navigate('/login')} className="w-full text-xs">
+                    <Button variant="outline" size="sm" onClick={() => router.push('/login')} className="w-full text-xs">
                       Sign In to Take Quiz
                     </Button>
                   </div>
@@ -294,8 +296,9 @@ export function ExperimentPage() {
               <ExperimentAssistant experiment={experiment} />
             </div>
           </div>
-        )}
-      </main>
-    </div>
+        )
+        }
+      </main >
+    </div >
   );
 }

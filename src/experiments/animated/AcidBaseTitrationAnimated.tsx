@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, Pause, Thermometer, Droplet, Info, Activity, Save } from 'lucide-react';

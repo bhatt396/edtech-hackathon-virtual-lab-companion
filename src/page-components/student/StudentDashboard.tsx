@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Navbar } from '@/components/common/Navbar';
 import { ExperimentCard } from '@/components/lab/ExperimentCard';
@@ -27,7 +29,7 @@ const studentStats = [
 
 export function StudentDashboard() {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [selectedSubject, setSelectedSubject] = useState<Subject | 'all'>('all');
 
   // Classroom State
@@ -58,7 +60,7 @@ export function StudentDashboard() {
     : enhancedExperiments.filter(exp => exp.subject === selectedSubject);
 
   const handleStartExperiment = (id: string) => {
-    navigate(`/experiment/${id}`);
+    router.push(`/experiment/${id}`);
   };
 
   return (

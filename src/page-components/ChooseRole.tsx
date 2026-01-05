@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth, UserRole } from '@/context/AuthContext';
 import { RoleSelector } from '@/components/auth/RoleSelector';
 import { Button } from '@/components/ui/button';
@@ -13,14 +15,14 @@ export function ChooseRole() {
     const [selectedRole, setSelectedRole] = useState<UserRole>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { user, isAuthenticated } = useAuth();
-    const navigate = useNavigate();
+    const router = useRouter();
 
     // If user already has a role, redirect them
     useEffect(() => {
         if (isAuthenticated && user?.role) {
-            navigate(`/${user.role}`);
+            router.push(`/${user.role}`);
         }
-    }, [isAuthenticated, user, navigate]);
+    }, [isAuthenticated, user, router]);
 
     const handleConfirmRole = async () => {
         if (!selectedRole || !user) {
@@ -40,7 +42,7 @@ export function ChooseRole() {
 
             toast.success(`Welcome to the lab!`);
             // AuthContext now uses onSnapshot, so role will update automatically
-            navigate(`/${selectedRole}`);
+            router.push(`/${selectedRole}`);
         } catch (error) {
             console.error("Error saving role:", error);
             toast.error('Failed to save role. Please try again.');

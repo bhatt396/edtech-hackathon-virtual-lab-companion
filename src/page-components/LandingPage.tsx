@@ -1,5 +1,7 @@
-// src/pages/sPage.tsx
-import { useNavigate } from 'react-router-dom';
+"use client";
+
+// src/pages/LandingPage.tsx
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { FlaskConical, Boxes, ClipboardList, Download, Sun, Moon, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -24,14 +26,14 @@ const useMarqueeAnimation = () => {
 };
 
 export function LandingPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { isAuthenticated } = useAuth();
   const [language, setLanguage] = useState<'nepali' | 'english'>('english');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   const isDark = theme === 'dark';
 
-  const handleGuestAccess = () => navigate('/library');
+  const handleGuestAccess = () => router.push('/library');
 
   // Feature definitions – keep concise for a cleaner UI
   const features = [
@@ -62,8 +64,8 @@ export function LandingPage() {
             {isDark ? <Sun className="w-5 h-5 fill-yellow-400" /> : <Moon className="w-5 h-5 fill-slate-600" />}
           </Button>
           {/* Auth actions */}
-          <Button onClick={() => navigate('/login')} size="sm" className="bg-blue-600 hover:bg-blue-500 text-white shadow-lg">Log In</Button>
-          <Button onClick={() => navigate('/login')} size="sm" variant="outline" className={`border ${isDark ? 'border-slate-600 text-black-200 hover:bg-white/10' : 'border-slate-300 text-slate-700 hover:bg-slate-50'}`}>Sign Up</Button>
+          <Button onClick={() => router.push('/login')} size="sm" className="bg-blue-600 hover:bg-blue-500 text-white shadow-lg">Log In</Button>
+          <Button onClick={() => router.push('/login')} size="sm" variant="outline" className={`border ${isDark ? 'border-slate-600 text-black-200 hover:bg-white/10' : 'border-slate-300 text-slate-700 hover:bg-slate-50'}`}>Sign Up</Button>
         </div>
       </nav>
 
@@ -85,7 +87,7 @@ export function LandingPage() {
             <Button size="lg" onClick={handleGuestAccess} className="bg-blue-600 hover:bg-blue-500 text-white shadow-xl rounded-xl">
               Start Learning for Free <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
-            <Button size="lg" onClick={() => navigate('/login')} className="bg-blue-600 hover:bg-blue-500 text-white">Sign In</Button>
+            <Button size="lg" onClick={() => router.push('/login')} className="bg-blue-600 hover:bg-blue-500 text-white">Sign In</Button>
           </div>
         </div>
 

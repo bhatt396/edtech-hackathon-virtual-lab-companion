@@ -1,14 +1,16 @@
-import { useNavigate } from 'react-router-dom';
+"use client";
+
+import { useRouter } from 'next/navigation';
 import { EXPERIMENTS } from '@/utils/constants';
 import { ExperimentCard } from '@/components/lab/ExperimentCard';
 import { Navbar } from '@/components/common/Navbar';
 import { BookOpen } from 'lucide-react';
 
 export function ExperimentLibrary() {
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const handleStartExperiment = (id: string) => {
-        navigate(`/experiment/${id}`);
+        router.push(`/experiment/${id}`);
     };
 
     return (

@@ -119,7 +119,7 @@ export function ExperimentAssistant({ experiment }: ExperimentAssistantProps) {
                                     <p className="text-sm text-muted-foreground">
                                         {offline
                                             ? '🔌 You are offline. Connect to the internet to chat.'
-                                            : '👋 Hi! I\'m your lab assistant. Ask me anything about this experiment!'}
+                                            : `👋 Hi! I'm your AI Lab Assistant for ${experiment.title}. Ask me how to perform the steps or clarify concepts!`}
                                     </p>
                                     <p className="text-xs text-muted-foreground mt-2">
                                         I can help in English or Nepali (नेपाली)
