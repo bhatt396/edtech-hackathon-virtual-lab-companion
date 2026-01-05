@@ -158,7 +158,9 @@ export function ExperimentPage() {
                 )}
               </div>
             </div>
-            {renderSimulation()}
+            <Suspense fallback={<div className="text-center p-10">Loading 3D Environment...</div>}>
+              {renderSimulation()}
+            </Suspense>
           </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-6">
@@ -180,7 +182,9 @@ export function ExperimentPage() {
                   </div>
 
                   <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                    {renderSimulation()}
+                    <Suspense fallback={<div className="h-[400px] flex items-center justify-center">Loading Simulation...</div>}>
+                      {renderSimulation()}
+                    </Suspense>
                   </div>
                 </div>
               ) : (
