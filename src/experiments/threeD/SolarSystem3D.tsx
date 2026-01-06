@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls, Stars, Text, Line, Billboard } from '@react-three/drei';
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, useEffect, Suspense } from 'react';
 import { TextureLoader, EllipseCurve, Vector3 } from 'three';
 import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
@@ -217,12 +217,14 @@ export default function SolarSystem3D() {
     };
 
     // Listen for fullscreen change events
-    useMemo(() => {
-        if (typeof document !== 'undefined') {
-            document.addEventListener('fullscreenchange', () => {
-                setIsFullscreen(!!document.fullscreenElement);
-            });
-        }
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        };
     }, []);
 
     return (
@@ -261,8 +263,14 @@ export default function SolarSystem3D() {
                 </Button>
             </div>
 
-            <Canvas shadows camera={{ position: [0, 30, 40], fov: 35 }}>
-                <SolarSystemContent controlsRef={controlsRef} isPaused={isPaused} />
+            <Canvas
+                shadows
+                camera={{ position: [0, 30, 40], fov: 35 }}
+                gl={{ powerPreference: 'high-performance', alpha: true, antialias: true }}
+            >
+                <Suspense fallback={null}>
+                    <SolarSystemContent controlsRef={controlsRef} isPaused={isPaused} />
+                </Suspense>
             </Canvas>
 
             {/* Legend Overlay */}
