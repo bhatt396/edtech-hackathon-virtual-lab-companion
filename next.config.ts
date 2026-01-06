@@ -1,18 +1,9 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
-    // Disable TypeScript build errors for now
-    typescript: {
-        ignoreBuildErrors: false,
-    },
-    // Image optimization
-    images: {
-        domains: [],
-    },
-    // Experimental features
-    experimental: {
-        optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    devIndicators: {
+        buildActivity: false,
+        buildActivityPosition: 'bottom-right',
     },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
