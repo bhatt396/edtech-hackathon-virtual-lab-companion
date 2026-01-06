@@ -1,6 +1,5 @@
 "use client";
 
-// src/pages/LandingPage.tsx
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { FlaskConical, Boxes, ClipboardList, Download, Sun, Moon, ArrowRight } from 'lucide-react';
@@ -13,7 +12,7 @@ const useMarqueeAnimation = () => {
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
-      @keyframes marquzee {
+      @keyframes marquee {
         0% { transform: translateX(100%); }
         100% { transform: translateX(-100%); }
       }
@@ -33,7 +32,10 @@ export function LandingPage() {
 
   const isDark = theme === 'dark';
 
-  const handleGuestAccess = () => router.push('/library');
+  const handleGuestAccess = () => {
+    // Navigate to student library/dashboard
+    router.push('/student');
+  };
 
   // Feature definitions – keep concise for a cleaner UI
   const features = [
@@ -73,6 +75,7 @@ export function LandingPage() {
       <main className="relative flex-1 flex flex-col items-center justify-center overflow-hidden">
         {/* Background – subtle animated gradient */}
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 opacity-30" />
+
         {/* Hero content */}
         <div className="relative z-10 w-full max-w-4xl px-6 text-center py-12">
           {/* Marquee – simplified */}

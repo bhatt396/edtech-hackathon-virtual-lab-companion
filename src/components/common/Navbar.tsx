@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ThemeToggle } from './ThemeToggle';
 import { MolecularLogo } from '@/components/MolecularLogo';
 
@@ -43,6 +44,12 @@ export function Navbar() {
           >
             Library
           </Button>
+          <Link href="/experiment/chemistry-lab" className="mx-2 hover:text-primary hidden md:inline">
+            Chemistry Lab
+          </Link>
+          <Link href="/experiment/titration-lab" className="mx-2 hover:text-primary hidden md:inline">
+            Titration Lab
+          </Link>
 
           <ThemeToggle />
 

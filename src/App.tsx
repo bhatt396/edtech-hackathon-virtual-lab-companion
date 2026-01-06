@@ -87,7 +87,7 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/student"
+        path="/student/login"
         element={
           <ProtectedRoute allowedRole="student">
             <StudentDashboard />

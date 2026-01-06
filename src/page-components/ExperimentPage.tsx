@@ -33,6 +33,7 @@ import { ExperimentAssistant } from '@/components/lab/ExperimentAssistant';
 import SolarSystem3D from '@/experiments/threeD/SolarSystem3D';
 import SolarSystemAnimated from '@/experiments/animated/SolarSystemAnimated';
 import OhmsLawLabInteractive from '@/experiments/interactive/OhmsLawLabInteractive';
+import RealTitrationLab from '@/experiments/interactive/chemistry/RealTitrationLab';
 
 // ... (existing imports)
 
@@ -55,7 +56,17 @@ export function ExperimentPage() {
   const [mode, setMode] = useState<'2d' | 'animated' | '3d' | 'interactive'>(isSolarSystem ? '3d' : '2d');
 
   if (!experiment) {
-    // ... (existing 404 block)
+    return (
+      <div className="min-h-screen bg-[#020617] flex items-center justify-center text-white">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold mb-4">Experiment Not Found</h1>
+          <p className="text-slate-400 mb-6">The experiment you're looking for doesn't exist.</p>
+          <Button onClick={() => router.push('/library')}>
+            Browse Library
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   // Check if experiment has simulation
@@ -90,6 +101,7 @@ export function ExperimentPage() {
         return null;
       case 'interactive':
         if (isOhmsLaw) return <OhmsLawLabInteractive />;
+        if (isAcidBase) return <RealTitrationLab />;
         return null;
       default:
         return null;
@@ -123,7 +135,7 @@ export function ExperimentPage() {
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                  {experiment.title}
+                  {experiment?.title ?? 'Experiment'}
                 </h1>
                 <Badge variant="outline" className="capitalize">
                   {experiment.subject}
@@ -153,7 +165,7 @@ export function ExperimentPage() {
                 <Button variant={mode === '2d' ? 'default' : 'outline'} onClick={() => setMode('2d')}>2D View</Button>
                 <Button variant={mode === 'animated' ? 'default' : 'outline'} onClick={() => setMode('animated')}>Animated</Button>
                 <Button variant={mode === '3d' ? 'default' : 'outline'} onClick={() => setMode('3d')}>3D View</Button>
-                {isOhmsLaw && (
+                {(isOhmsLaw || isAcidBase) && (
                   <Button variant={mode === 'interactive' ? 'default' : 'outline'} onClick={() => setMode('interactive')}>Interactive</Button>
                 )}
               </div>
@@ -179,6 +191,11 @@ export function ExperimentPage() {
                     <Button variant={mode === '3d' ? 'default' : 'outline'} onClick={() => setMode('3d')}>
                       3D View
                     </Button>
+                    {(isOhmsLaw || isAcidBase) && (
+                      <Button variant={mode === 'interactive' ? 'default' : 'outline'} onClick={() => setMode('interactive')}>
+                        Interactive
+                      </Button>
+                    )}
                   </div>
 
                   <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">

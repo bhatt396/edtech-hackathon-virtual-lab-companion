@@ -3,8 +3,8 @@ import React from 'react';
 export const MolecularLogo = ({ size = 45, className = "" }: { size?: number, className?: string }) => {
     return (
         <div className={`relative ${className}`}>
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-700 rounded-2xl blur-xl opacity-70" />
-            <div className="relative bg-gradient-to-br from-blue-600 to-purple-700 p-2.5 rounded-2xl shadow-2xl backdrop-blur-sm">
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500 to-indigo-600 rounded-2xl blur-xl opacity-70" />
+            <div className="relative bg-gradient-to-br from-teal-500 to-indigo-600 p-2.5 rounded-2xl shadow-2xl backdrop-blur-sm">
                 <svg width={size} height={size} viewBox="0 0 60 60" className="text-white">
                     <circle cx="30" cy="30" r="6" fill="currentColor" />
                     <circle cx="15" cy="20" r="4" fill="currentColor" />
