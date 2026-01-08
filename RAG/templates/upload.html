@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Knowledge Upload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+        <div class="text-center mb-8">
+            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-cloud-upload-alt text-2xl text-blue-600"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">Upload Knowledge</h1>
+            <p class="text-gray-500 mt-2">Add PDF/DOCX manuals to the RAG system</p>
+        </div>
+
+        <form id="uploadForm" class="space-y-6">
+            <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 transition-colors hover:border-blue-500 hover:bg-blue-50 cursor-pointer"
+                id="dropZone">
+                <input type="file" id="fileInput" name="file"
+                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf,.docx,.txt" required>
+                <div class="text-center pointer-events-none">
+                    <i class="fas fa-file-pdf text-4xl text-gray-300 mb-3" id="fileIcon"></i>
+                    <p class="text-sm font-medium text-gray-700" id="fileName">Drop file here or click to browse</p>
+                    <p class="text-xs text-gray-400 mt-1">Supports PDF, DOCX, TXT</p>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 group">
+                <span>Upload Document</span>
+                <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </form>
+
+        <div id="status" class="mt-6 hidden rounded-lg p-4 text-sm font-medium"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const fileIcon = document.getElementById('fileIcon');
+        const status = document.getElementById('status');
+        const dropZone = document.getElementById('dropZone');
+
+        // Drag & Drop effects
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() { dropZone.classList.add('border-blue-500', 'bg-blue-50'); }
+        function unhighlight() { dropZone.classList.remove('border-blue-500', 'bg-blue-50'); }
+
+        // File selection UI update
+        fileInput.addEventListener('change', function (e) {
+            if (this.files && this.files[0]) {
+                fileName.textContent = this.files[0].name;
+                fileIcon.className = 'fas fa-check-circle text-4xl text-green-500 mb-3';
+            }
+        });
+
+        // Submit handler
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const btn = form.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                status.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'bg-green-50', 'text-green-700');
+
+                if (response.ok) {
+                    status.classList.add('bg-green-50', 'text-green-700');
+                    status.innerHTML = `<i class="fas fa-check-circle mr-2"></i> ${result.message}`;
+                    form.reset();
+                    fileName.textContent = "Drop file here or click to browse";
+                    fileIcon.className = 'fas fa-file-pdf text-4xl text-gray-300 mb-3';
+                } else {
+                    throw new Error(result.detail || 'Upload failed');
+                }
+            } catch (error) {
+                status.classList.remove('hidden');
+                status.classList.add('bg-red-50', 'text-red-700');
+                status.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i> ${error.message}`;
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+{
+    "name": "lab-experiment-evaluator",
+    "version": "1.0.0",
+    "description": "LangChain pipeline for evaluating lab experiment states using RAG and Gemini",
+    "main": "src/index.ts",
+    "scripts": {
+        "dev": "ts-node src/index.ts",
+        "start": "node dist/index.js",
+        "build": "tsc",
+        "test": "ts-node src/test.ts"
+    },
+    "keywords": [
+        "langchain",
+        "gemini",
+        "rag",
+        "lab-experiments"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@langchain/community": "^0.3.17",
+        "@langchain/core": "^0.3.24",
+        "@langchain/google-genai": "^0.1.4",
+        "chromadb": "^1.9.2",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "langchain": "^0.3.7",
+        "mammoth": "^1.8.0",
+        "multer": "^1.4.5-lts.1",
+        "pdf-parse": "^1.1.1",
+        "uuid": "^11.0.3"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
+        "@types/form-data": "^2.2.1",
+        "@types/multer": "^1.4.12",
+        "@types/node": "^22.10.5",
+        "@types/pdf-parse": "^1.1.4",
+        "@types/uuid": "^10.0.0",
+        "axios": "^1.13.2",
+        "form-data": "^4.0.5",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.3"
+    }
+}

@@ -1,0 +1,27 @@
+
+    STANDARD OPERATING PROCEDURE: ACID-BASE TITRATION
+    
+    1. Preparation:
+       - Rinse the burette with distilled water, then with the standard base solution (NaOH).
+       - Fill the burette with NaOH. Eliminate air bubbles.
+       - Record INITIAL READING (V1).
+       
+    2. Flask Setup:
+       - Pipette 25mL of unknown acid (HCl) into a clean conical flask.
+       - Add 2-3 drops of Phenolphthalein indicator. Solution should be COLORLESS.
+       
+    3. Titration:
+       - Place flask under burette over a white tile.
+       - Add NaOH slowly while SWIRLING the flask constantly.
+       - Slow down to drop-wise addition as the endpoint approaches (flash of pink).
+       
+    4. Endpoint:
+       - Stop when a FAINT PINK color persists for at least 30 seconds.
+       - Record FINAL READING (V2).
+       - Verify: V2 - V1 = Titer value.
+       
+    SAFETY:
+    - Wear safety goggles at all times.
+    - If acid spills on skin, wash immediately with water.
+    - Never pipette by mouth.
+    
